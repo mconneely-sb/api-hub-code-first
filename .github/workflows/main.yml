@@ -21,18 +21,13 @@ jobs:
 
     - name: Build Project
       run: dotnet build --configuration Release --no-restore
-
-    - name: Start the API
+      
+    - name: Install Swashbuckle CLI
+      run: dotnet tool install -g Swashbuckle.AspNetCore.Cli
+      
+    - name: Export OpenAPI Specification
       run: |
-        dotnet run --configuration Release --no-build & sleep 5 
-        # Allow API to start
+        mkdir -p openapi
+        dotnet swagger tofile --output openapi/openapi.json bin/Release/net8.0/ToDoApi.dll v1
 
-    - name: Fetch OpenAPI Spec
-      run: |
-        curl https://localhost:5118/swagger/v1/swagger.json -o openapi.json
 
-    - name: Upload OpenAPI Spec as Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: OpenAPI-Spec
-        path: openapi.json
