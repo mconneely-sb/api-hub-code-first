@@ -29,7 +29,7 @@ jobs:
 
     - name: Fetch OpenAPI Spec
       run: |
-        curl https://localhost:7248/swagger/v1/swagger.json -o openapi.json
+        curl https://localhost:5118/swagger/v1/swagger.json -o openapi.json
 
     - name: Upload OpenAPI Spec as Artifact
       uses: actions/upload-artifact@v4
