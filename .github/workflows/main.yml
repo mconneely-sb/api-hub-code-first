@@ -27,7 +27,6 @@ jobs:
       
     - name: Export OpenAPI Specification
       run: |
-        mkdir -p openapi
-        dotnet swagger tofile --output openapi/openapi.json bin/Release/net8.0/ToDoApi.dll v1
+        dotnet swagger tofile --output openapi.json bin/Release/net8.0/ToDoApi.dll v1
 
 
