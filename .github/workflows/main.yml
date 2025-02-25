@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  swaggerhub_owner: MConneely
+  apihub_owner: ${{vars.APIHUB_ORG_NAME}} 
 
 jobs:
   build:
@@ -42,12 +42,12 @@ jobs:
       env:
           SWAGGERHUB_API_KEY: ${{secrets.APIHUB_DESIGN_API_KEY}}      
       run: |
-        swaggerhub api:validate:local --organization $swaggerhub_owner --file openapi.json --fail-on-critical --json
+        swaggerhub api:validate:local --organization $apihub_owner --file openapi.json --fail-on-critical --json
     - name: Add API to API Hub
       env:
           SWAGGERHUB_API_KEY: ${{secrets.APIHUB_DESIGN_API_KEY}}      
       run: |
-        swaggerhub api:create  $swaggerhub_owner/api/1.0.0 --file openapi.json --visibility public
+        swaggerhub api:create  $apihub_owner/api/1.0.0 --file openapi.json --visibility public
 
 
   
