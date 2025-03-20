@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 
 env:
+  # Set the API Hub organization name you wish to publsh the OpenAPI definition to
   apihub_owner: ${{vars.APIHUB_ORG_NAME}} 
 
 jobs:
@@ -32,6 +33,7 @@ jobs:
         dotnet run --configuration Release --no-build & sleep 5 # Allow API to start
 
     - name: Fetch OpenAPI Spec
+      # Generate and download the OpenAPI file to the build agent
       run: |
         curl http://localhost:5118/swagger/v1/swagger.json -o openapi.json
 
@@ -42,11 +44,16 @@ jobs:
       env:
           SWAGGERHUB_API_KEY: ${{secrets.APIHUB_DESIGN_API_KEY}}      
       run: |
+        # Optional - Use the SwaggerHub CLI to check the OpenAPI definition passes Standardization checks that have been set out in API Hub
+        # https://support.smartbear.com/api-hub/design/docs/en/manage-resource-access/api-standardization.html
+
         swaggerhub api:validate:local --organization $apihub_owner --file openapi.json --fail-on-critical --json
     - name: Add API to API Hub
       env:
           SWAGGERHUB_API_KEY: ${{secrets.APIHUB_DESIGN_API_KEY}}      
       run: |
+        # Use the SwaggerHub CLI to add the OpenAPI definition into API Hub. You can provide different parameters as documented
+        # https://github.com/SmartBear/swaggerhub-cli?tab=readme-ov-file#swaggerhub-apicreate
         swaggerhub api:create  $apihub_owner/api/1.0.0 --file openapi.json --visibility public
 
 
