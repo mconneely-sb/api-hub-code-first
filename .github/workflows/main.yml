@@ -1,4 +1,4 @@
-name: Build API
+apihub_owner: ${{vars.APIHUB_ORG_NAME}} name: Build API
 on:
   push:
     branches: [ main ]
@@ -9,7 +9,8 @@ on:
 env:
   # Set the API Hub organization name you wish to publsh the OpenAPI definition to
   apihub_owner: ${{vars.APIHUB_ORG_NAME}} 
-
+  api_version: ${{vars.API_VERSION}}
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -54,7 +55,7 @@ jobs:
       run: |
         # Use the SwaggerHub CLI to add the OpenAPI definition into API Hub. You can provide different parameters as documented
         # https://github.com/SmartBear/swaggerhub-cli?tab=readme-ov-file#swaggerhub-apicreate
-        swaggerhub api:create  $apihub_owner/api/1.0.0 --file openapi.json --visibility public
+        swaggerhub api:create  $apihub_owner/api/$api_version --file openapi.json --visibility public
 
 
   
